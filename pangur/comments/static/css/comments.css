@@ -1,0 +1,137 @@
+
+    .hidden {
+      display: none;
+    }
+
+    .avatar {
+        background-repeat: no-repeat;
+        background-position: center center;
+        border: 1px solid black;
+        background-color: #ccc;
+        min-height: 100px;
+        min-width: 100px;
+        -moz-border-radius: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+    }
+
+    .comments {
+        width: 600px;
+        padding: 1em;
+        margin: 1em auto;
+    }
+
+    .comments li {
+        margin-top: 1em;
+        display: block;
+        border: 1px solid silver;
+    }
+    .comAvLeft .avatar {
+        float: left;
+    }
+    .comAvRight .avatar {
+        float: right;
+    }
+
+    .leader {
+        border-bottom: 1px solid silver;
+        color: #777;
+        margin-left: 140px;
+        margin-right: 10px;
+    }
+
+    .text {
+        margin-left: 140px;
+        margin-right: 10px;
+    }
+    .comAvRight .text {
+        margin-right: 140px;
+        margin-left: 10px;
+    }
+
+    .comAvRight .leader {
+        text-align: right;
+        margin-right: 140px;
+        margin-left: 10px;
+    }
+
+    .commentActions {
+        display: inline;
+        float: right;
+        border: 1px solid silver;
+        padding: 0 1em;
+    }
+
+    .commentActions img {
+        vertical-align: middle;
+    }
+
+    .comAvRight .commentActions {
+        float: left;
+    }
+
+    #commentMenu {
+        background-color: white;
+        border: 1px solid silver;
+        position: absolute;
+        z-index: 200000;
+        width: 85px;
+    }
+
+    .emoticons {
+        position: absolute;
+        border: 1px solid #bbb;
+        -moz-border-radius: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+        background-color: white;
+        width:168px;
+        z-index: 100;
+    }
+
+    .emoticons ul li {
+        height:32px;
+        width: 168px;
+    }
+    .emoticons ul li ul li, .emoticon .icon {
+        background-image: url('/images/emote_all.png');
+        display: inline-block;
+        height:31px;
+        width:39px;
+    }
+    .emoticons ul li ul li:hover {
+        background-color: #eee;
+    }
+    #replyForm .happy {background-position: 0px 0px; }
+    #replyForm .sad {background-position: -40px 0px; }
+    #replyForm .grumpy {background-position: -80px 0px; }
+    #replyForm .cool {background-position: -120px 0px; }
+
+    #replyForm .surprised {background-position: 0px -32px; }
+    #replyForm .love {background-position: -40px -32px; }
+    #replyForm .embarassed {background-position: -80px -32px; }
+    #replyForm .tear {background-position: -120px -32px; }
+    #
+    #replyForm .awed {background-position: 0px -64px; }
+    #replyForm .boggled {background-position: -40px -64px; }
+    #replyForm .artistic {background-position: -80px -64px; }
+    #replyForm .thumbs {background-position: -120px -64px; }
+
+    .emoticon .icon {
+        background-position: 0px 0px;
+        background-repeat: no-repeat;
+    }
+
+    .emoticon span {
+        height: 32px;
+        vertical-align: middle;
+    }
+    .emoticon {
+        border: 1px solid silver;
+        -moz-border-radius: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+        width: 140px;
+        opacity: 0.5;
+
+    }

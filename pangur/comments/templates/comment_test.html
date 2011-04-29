@@ -1,0 +1,16 @@
+{% import "forms.html" as m %}
+{% import "comment_macros.html" as comments with context %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <script src="/js/jquery-1.4.2.min.js" type="text/javascript"></script>
+        <script src="/js/jquery-ui-1.8.5.custom.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="/css/reset-min.css" />
+        {{ comments.resources() }}
+        <title>Comments Test Page</title>
+    </head>
+    <body>
+        {{ comments.addCommentForm() }}
+        {{ comments.listWithAvatarAlt([]) }}
+    </body>
+</html>
