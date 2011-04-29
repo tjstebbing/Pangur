@@ -1,0 +1,63 @@
+#!/usr/bin/python
+import sys
+
+from werkzeug import run_simple, SharedDataMiddleware
+
+from pangur.globals import Config
+from pangur.service import init, application
+from pangur import database
+
+
+
+
+def help(command=None):
+    print "help"
+
+def setupdb(conf, path):
+    if '.' in path:
+        pkg = path.split('.')[0]
+    else:
+        pkg = path
+    init(conf, pkg)
+    database.DB(conf).setupDB()
+
+def run(conf, pkg):
+    #todo replace root in static resource paths
+    init(conf, pkg)
+    app = SharedDataMiddleware(application, conf.dev.static_resources)
+    run_simple(conf.dev.interface, conf.dev.port, app)
+
+
+commands = {'help' : help,
+            'setupdb' : setupdb,
+            'run' : run}
+
+def processCommand(command):
+    if command == 'help':
+        help(command)
+        sys.exit()
+    try:
+        path = sys.argv[2]
+        __import__(path)
+        mod = sys.modules[path]
+        o = None
+        for k,o in mod.__dict__.items():
+            if type(o) is Config: 
+                conf = o
+                print mod, k
+        if conf:
+            commands[command](conf, path)
+        else:
+            raise ImportError()
+    except ImportError, e:
+        print "A valid Config object could not be found in '%s'." % (path,)
+        sys.exit(1)
+
+
+if len(sys.argv) == 1:
+    help()
+elif sys.argv[1] in commands:
+    processCommand(sys.argv[1])
+
+
+
