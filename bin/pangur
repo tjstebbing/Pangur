@@ -22,9 +22,10 @@ def setupdb(conf, path):
     database.DB(conf).setupDB()
 
 def run(conf, pkg):
-    #todo replace root in static resource paths
-    init(conf, pkg)
-    app = SharedDataMiddleware(application, conf.dev.static_resources)
+    resources = {}
+    for k,v in conf.dev.static_resources.items():
+        resources[k] = v.format(**vars(conf.paths))
+    app = SharedDataMiddleware(application, resources)
     run_simple(conf.dev.interface, conf.dev.port, app)
 
 
@@ -40,20 +41,21 @@ def processCommand(command):
         path = sys.argv[2]
         __import__(path)
         mod = sys.modules[path]
-        o = None
+        conf = None
         for k,o in mod.__dict__.items():
             if type(o) is Config: 
                 conf = o
-                print mod, k
         if conf:
             commands[command](conf, path)
         else:
             raise ImportError()
     except ImportError, e:
+        print e
         print "A valid Config object could not be found in '%s'." % (path,)
         sys.exit(1)
 
 
+sys.path.append('.')
 if len(sys.argv) == 1:
     help()
 elif sys.argv[1] in commands:

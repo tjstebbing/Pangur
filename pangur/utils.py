@@ -260,3 +260,14 @@ def timesince(d, now=None):
         if count2 != 0:
             s += ' and %(number)d %(type)s' % {'number': count2, 'type': name2(count2)}
     return s
+
+
+def populateFromForm(form, obj, fields):
+    for name, field in form._fields.iteritems():
+        if name in fields:
+            field.populate_obj(obj, name)
+
+def jinjaWidget(field, **kwargs):
+    """This is a WTForms widget that passes everything to a jinja macro"""
+    return kwargs['macro'](field)
+

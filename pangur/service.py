@@ -33,6 +33,7 @@ def init(config, _package_=None):
     #print '\n'.join(templates.list_templates(filter_func=lambda n: not n.startswith('.')))
     #map static files.
     static = staticfiles.FileServer(utils.staticPaths)
+    return application
 
 
 def prepareToRender(request):
@@ -67,7 +68,7 @@ def application(request):
             if templateName and callable(func):
                 #call function and merge returned dict with templateVars
                 #then render the template
-                templateVars.update(func(request))
+                templateVars.update(func(request) or {})
                 template = templates.get_template(templateName)
                 request.response.data = template.render(**templateVars)
             elif templateName:

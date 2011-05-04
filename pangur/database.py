@@ -25,7 +25,7 @@ class DB(object):
 
     def __init__(self, conf):
         if not self.engine:
-            path = conf.db.postgres_path.format(**vars(conf.db))
+            path = conf.db.path.format(**vars(conf.db))
             self.engine = sa.create_engine(path, echo=conf.debug)
             self.begin = orm.sessionmaker(bind=self.engine)
 
