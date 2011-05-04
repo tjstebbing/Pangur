@@ -3,9 +3,8 @@ from datetime import datetime
 import sqlalchemy as sa
 import wtforms as wt
 
-from pangur.utils import map, registerForm, slugify, populateFromForm
-from pangur.database import orMap, DBMeta, rel
-from pangur.users import User
+from pangur import (map, registerForm, slugify, populateFromForm, orMap,
+                    DBMeta, rel, User, backref)
 
 
 #Create an sqlalchemy table to store entries in
@@ -20,7 +19,7 @@ entriesTable = sa.Table(
     sa.Column('created', sa.DateTime))
 
 
-@orMap(entriesTable, properties={'user': rel(User)})
+@orMap(entriesTable, properties={'user': rel(User, backref=backref('entries'))})
 class Entry(object):
     """An Entry represents a writing on our blog and is mapped to
     the entriesTable, a relationship is also established with a user
@@ -59,4 +58,4 @@ def newEntry(request):
 
 @map('/', 'entries.html')
 def entries(request):
-    return {'entries' : 'woo'}
+    return {'entries' : request.session.user.entries}

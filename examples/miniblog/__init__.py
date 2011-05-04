@@ -1,11 +1,7 @@
-from pangur import utils
-from pangur.service import init
-from pangur.globals import conf
-
-conf.db.name = "miniblog"
-conf.db.path = "sqlite:////tmp/{name}"
-
-utils.registerTemplates(__file__, 'templates')
+from pangur import registerTemplates, conf, init
 
 conf.setPaths(__file__)
-init(conf, __package__)
+conf.db.name = "miniblog"
+conf.db.path = "sqlite:////tmp/{name}"
+registerTemplates(__file__, 'templates')
+application = init(conf, __package__)
