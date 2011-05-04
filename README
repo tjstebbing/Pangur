@@ -7,13 +7,13 @@ Installation
 
 Add pangur to your PYTHONPATH or install with:
 
-python setup.py install
+$> python setup.py install
 
 
 Pangur requires some other software which can easily be installed from the 
 cheeseshop:
 
-easy_install wtforms sqlalchemy jinja2 werkzeug
+$> easy_install wtforms sqlalchemy jinja2 werkzeug
 
 You'll probably want a database to connect to as well, I like to use postgres
 or sqlite, but anything supported by alchemy should be fine.
@@ -22,4 +22,8 @@ or sqlite, but anything supported by alchemy should be fine.
 Getting Started
 ---------------
 
-TODO, see examples/
+TODO, see the examples
+
+$> cd examples
+$> pangur run miniblog
+
