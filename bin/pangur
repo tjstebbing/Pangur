@@ -11,9 +11,16 @@ from pangur import database
 
 
 def help(command=None):
-    print "help"
+    """help - display this help"""
+    if command in commands and command != 'help':
+        print "usage: pangur %s" % commands[command].__doc__
+    else:
+        print "usage:"
+        for cmd in sorted(commands.values(), key=lambda c: c.__doc__):
+            print "    pangur %s" % cmd.__doc__
 
 def setupdb(conf, path):
+    """setupdb <package> - create database tables"""
     if '.' in path:
         pkg = path.split('.')[0]
     else:
@@ -22,6 +29,7 @@ def setupdb(conf, path):
     database.DB(conf).setupDB()
 
 def run(conf, pkg):
+    """run <package> - run development server"""
     resources = {}
     for k,v in conf.dev.static_resources.items():
         resources[k] = v.format(**vars(conf.paths))
@@ -35,9 +43,14 @@ commands = {'help' : help,
 
 def processCommand(command):
     if command == 'help':
+        if len(sys.argv) > 2:
+            command = sys.argv[2]
         help(command)
         sys.exit()
     try:
+        if len(sys.argv) == 2:
+            help(sys.argv[1])
+            sys.exit()
         path = sys.argv[2]
         __import__(path)
         mod = sys.modules[path]
@@ -60,6 +73,6 @@ if len(sys.argv) == 1:
     help()
 elif sys.argv[1] in commands:
     processCommand(sys.argv[1])
-
-
+else:
+    print "unknown command '%s', try 'help' for help." % sys.argv[1]
 
