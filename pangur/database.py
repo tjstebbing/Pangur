@@ -5,6 +5,7 @@ from sqlalchemy import orm
 
 rel = orm.relation
 backref = orm.backref
+mapper = orm.mapper
 
 setAttrs = lambda self, **kw: [setattr(self, k, v) for k,v in kw.items()]
 

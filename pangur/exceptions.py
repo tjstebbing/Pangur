@@ -1,5 +1,7 @@
 from werkzeug.exceptions import HTTPException
-from werkzeug import redirect
+from werkzeug import exceptions, redirect
+
+NotFound = exceptions.NotFound
 
 class RedirectException(HTTPException):
 
