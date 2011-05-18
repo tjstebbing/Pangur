@@ -34,7 +34,7 @@ def run(conf, pkg):
     for k,v in conf.dev.static_resources.items():
         resources[k] = v.format(**vars(conf.paths))
     app = SharedDataMiddleware(application, resources)
-    run_simple(conf.dev.interface, conf.dev.port, app)
+    run_simple(conf.dev.interface, conf.dev.port, app, use_reloader=True, use_debugger=True)
 
 
 commands = {'help' : help,
