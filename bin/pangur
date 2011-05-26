@@ -25,7 +25,6 @@ def setupdb(conf, path):
         pkg = path.split('.')[0]
     else:
         pkg = path
-    init(conf, pkg)
     database.DB(conf).setupDB()
 
 def run(conf, pkg):
