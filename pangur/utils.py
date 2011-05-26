@@ -1,7 +1,10 @@
 from os.path import join as opj, normpath as opn, dirname as opd
-import re, urlparse, datetime
+from types import FunctionType, ClassType
+from collections import MutableMapping, namedtuple
+import re, datetime, inspect
 
 from werkzeug.routing import Map, Rule
+
 
 url_map = Map()
 
@@ -116,42 +119,189 @@ def slugify(value):
     return _slugify_hyphenate_re.sub('-', value)
 
 
-decoratorRegistries = {}
-def createRegistryDecoratorWithArgs(registryName):
+class RegistryDecorator(MutableMapping):
     """
-    registerChook = createRegistryDecorator('chooks')
+    Create a decorator that builds a mapping of decorated functions/classes.
 
-    @registerChook(breed='bantam')
-    def brrrrrkkkkk():
-        pass
+    You can access the registry contents as a Mapping, where the stored
+    keys and values are determined by a custom inserter function.
 
-    print decoratorRegistries['chooks']
-    [(<function brrrrrkkkkk at 0x7f4e0b77c410>, (), {'breed': 'bantam'})]
+    If no custom inserter is given, the behaviour depends on withArgs:
+    when True, a namedtuple (item, args, kwargs) is inserted;
+    when False, the function/class itself is inserted.
+
+    Arguments::
+
+        name:
+            registry name for debugging and logging.
+
+        inserter(registry, func, *args and **kwargs):
+            Callable that validates arguments and inserts the decorated
+            function/class (or any other value) into the registry.
+
+        autoCall:
+            if True (the default), the decorator can be used with or without
+            calling it; direct use will be detected by checking for a single
+            argument of function/class type. This will not work if the
+            decorator needs to support a use-case where a single positional
+            argument of function/class type will be passed; in that case use
+            autoCall=False.
+
+        withArgs:
+            if True (the default), the decorator is allowed to take arguments,
+            otherwise an assertion will be raised. When autoCall is False,
+            this option determines whether the decorator must be called first
+            or used directly.
+
+        standAlone:
+            if True (default is False), the decorator can also be used without
+            decorating anything, to register its arguments only. In that case,
+            the inserter must be supplied, and will be passed func=None.
     """
-    decoratorRegistries[registryName] = []
-    def decorator(*args, **kwargs):
-        def decorate(item):
-            decoratorRegistries[registryName].append((item, args, kwargs))
-            return item
-        return decorate
-    return decorator
 
-def createRegistryDecorator(registryName):
+    RegistryItem = namedtuple('RegistryItem', ['func','args','kwargs'])
+
+    def __init__(self, name, inserter=None, autoCall=True, withArgs=True,
+                 standAlone=False, unique=True, debug=False, doc=None):
+         self.name = name
+         if doc: self.__doc__ = doc
+         self.inserter = inserter
+         self.autoCall = autoCall
+         self.withArgs = withArgs
+         self.standAlone = standAlone
+         self.unique = unique
+         self.debug = debug
+         self.mapping = {}
+         self.pending = None
+         if standAlone:
+            assert callable(inserter), "inserter must be provided when standAlone=True"
+
+    def __str__(self):
+        return "<%s.%s '%s' at 0x%08x>" % (self.__module__, self.__name__,
+                                           self.name, id(self))
+
+    def _finish(self):
+        """Add a pending stand-alone decorator to the registry."""
+        if self.pending is not None:
+            args, kwargs = self.pending
+            self.pending = None
+            if self.inserter:
+                self.inserter(self, None, *args, **kwargs)
+
+    def __call__(self, *args, **kwargs):
+        """Use the registry as a decorator on a function class."""
+        # handle pending stand-alone decorators.
+        if self.pending is not None:
+            self._finish()
+        # detect use as a decorator without a call to the decorator by
+        # checking if the first and only argument is a function or class.
+        isDecorating = (len(args) == 1 and not kwargs and
+                        isinstance(args[0], (FunctionType,ClassType)))
+        func = None
+        indirect = False
+        if self.autoCall:
+            if isDecorating:
+                # used to decorate, without a call to pass args.
+                func,args = args[0],args[1:]
+            else:
+                # called with args, return a decorate function.
+                indirect = True
+            if not self.withArgs:
+                assert not (args or kwargs), "decorator is not allowed to "\
+                                             "take arguments"
+        else:
+            # withArgs determines whether we expect a call to the decorator
+            # with arguments before the decoration call.
+            if self.withArgs:
+                # called with args, return a decorate function.
+                indirect = True
+            else:
+                # can only be used directly without an args call.
+                assert isDecorating, "decorator is not allowed to "\
+                                     "take arguments"
+                func,args = args[0],args[1:]
+        # make a callable that will register a decorated item.
+        def _decorate(func):
+            if self.inserter:
+                self.inserter(self, func, *args, **kwargs)
+            elif self.withArgs:
+                self[func.__name__] = (func, args, kwargs)
+            else:
+                self[func.__name__] = func
+            return func
+        # register the decorated item now, unless indirect.
+        if not indirect:
+            return _decorate(func)
+        # track unused decorators for error reporting.
+        info = None
+        if self.debug and indirect and not self.standAlone:
+            info = inspect.getframeinfo(inspect.stack()[-1])
+        if self.standAlone:
+            self.pending = (args,kwargs)
+        # return the decorate function to apply to the function/class.
+        return _decorate
+
+    # implement MutableMapping abstract base class.
+
+    def __len__(self):
+        if self.pending is not None:
+            self._finish()
+        return len(self.mapping)
+
+    def __iter__(self):
+        if self.pending is not None:
+            self._finish()
+        return iter(self.mapping)
+
+    def __getitem__(self, key):
+        if self.pending is not None:
+            self._finish()
+        return self.mapping[key]
+
+    def __setitem__(self, key, value):
+        if self.pending is not None:
+            self._finish()
+        if self.unique:
+            assert key not in self.mapping, "registry key must be unique"
+        self.mapping[key] = value
+        if self.debug:
+            print "[registry '%s': added %r -> %r]" % (self.name, key, value)
+
+    def __delitem__(self, key):
+        if self.pending is not None:
+            self._finish()
+        ret = dict.__delitem__(self.mapping, key)
+        if self.debug:
+            print "[registry '%s': removed %r]" % (self.name, key)
+        return ret
+
+
+def registryDecorator(_usedWithoutCall=None, **kwargs):
     """
-    registerChook = createRegistryDecorator('chooks')
+    Declare a RegistryDecorator by decorating an insert function.
 
-    @registerChook
-    def brrrrrkkkkk():
-        pass
+    Creates a RegistyDecorator using the decorated function as the inserter
+    and the decorated function's name as the registry's debug name.
 
-    print decoratorRegistries['chooks']
-    [(<function brrrrrkkkkk at 0x7f4e0b77c410>, (), {})]
+    See RegistryDecorator for other available keyword arguments.
+
+    Examples:
+        @pangur.registry
+        def renderer(registry, func, foo=None, bar=True):
+            registry[func.__name__] = Something(func, foo, bar)
+
+        @pangur.registry(standAlone=True)
+        def renderer(registry, func, ...):
+            registry[func.__name__] = something
     """
-    decoratorRegistries[registryName] = []
-    def decorate(item):
-        decoratorRegistries[registryName].append((item, (), {}))
-        return item
-    return decorate
+    def _createRegistryDecorator(func):
+        assert callable(func), "@registry must decorate a function"
+        return RegistryDecorator(func.__name__, func,
+                                 doc=func.__doc__, **kwargs)
+    if _usedWithoutCall is not None:
+        assert not kwargs, "@registry only accepts keyword arguments"
+        return _createRegistryDecorator(_usedWithoutCall)
+    return _createRegistryDecorator
 
 
 def relative(request, path="", hash="", **kwargs):

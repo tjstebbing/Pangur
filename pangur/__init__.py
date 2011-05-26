@@ -6,4 +6,4 @@ from .exceptions import RedirectException, HTTPException
 from .database import rel, backref, orMap, mapper, setAttrs, DBMeta
 from .utils import (map, registerForm, registerStatic, registerTemplates,
                     relative, slugify, pluralize, timesince, populateFromForm,
-                    jinjaWidget)
+                    jinjaWidget, registryDecorator)
