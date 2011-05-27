@@ -16,7 +16,9 @@ conf = None
 static = None
 
 #decorator to register before render funcs
-beforeTemplateRender = utils.createRegistryDecorator('beforeTemplateRender')
+@utils.registryDecorator
+def beforeTemplateRender(registry, func):
+    registry.append(func)
 
 
 def init(config, _package_=None):
@@ -39,8 +41,8 @@ def init(config, _package_=None):
 def prepareToRender(request):
     request.forms = FormsRegistry(request)
     vars = {'request' : request, 'forms' : request.forms }
-    for match in utils.decoratorRegistries['beforeTemplateRender']:
-        match[0](request, vars)
+    for func in beforeTemplateRender.values():
+        func(request, vars)
     return vars
 
 @Request.application
