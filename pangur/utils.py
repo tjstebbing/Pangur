@@ -270,4 +270,3 @@ def populateFromForm(form, obj, fields):
 def jinjaWidget(field, **kwargs):
     """This is a WTForms widget that passes everything to a jinja macro"""
     return kwargs['macro'](field)
-
