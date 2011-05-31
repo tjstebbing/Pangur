@@ -1,0 +1,59 @@
+{% extends "index.html" %}
+{% import "pangur_macros.html" as m %}
+
+{% block content %}
+<script>
+    {% if showRegForm %}
+    var showRegForm = true;
+    {% else %}
+    var showRegForm = false;
+    {% endif %}
+    toggleForm = function() {
+            $('.loginBox, .registerBox, .regTog, .logTog').toggle();
+    }
+    $(function() {
+        $('.registerToggle').click(toggleForm);
+        if(showRegForm) { toggleForm(); }
+    });
+</script>
+<div class='loginPage'>
+    <div class='loginRegisterBox'>
+        <h1>Listful</h1>
+        <img src='/images/logo.png' class='logo'/>
+            <a href='#' class='registerToggle'>
+                <span class='regTog'>Register</span>
+                <span class='logTog hidden'>Login</span>
+            </a>
+        <div class='loginBox'>
+            <form method='post' action="/">
+                {% set f = request.forms.load('LoginForm') %}
+                {% if loginError %}
+                <div class="formError">
+                    <p><strong>Sorry!:</strong> {{loginError}}</p>
+                </div>
+                {% endif %}
+                <span>{{m.rawField(f.username, placeholder="username")}}</span>
+                <span>{{m.rawField(f.password, placeholder="password")}}</span>
+                <span>{{ m.rawSubmit(f, 'log in') }}</span>
+            </form>
+        </div>
+        <div class="registerBox hidden">
+            <p>Register new account:</p>
+            <form  method='post' action="/">
+                {% set f = request.forms.load('RegisterForm') %}
+                {% if regError %}
+                <div class="formError">
+                    <p><strong>Sorry!:</strong> {{regError}}</p>
+                </div>
+                {% endif %}
+                {{ m.loginField(f.newUsername, placeholder="Username") }}
+                {{ m.loginField(f.newEmail, placeholder="Email") }}
+                {{ m.loginField(f.newPassword, placeholder="Password") }}
+                <a class='tosLink' target='_blank' href="/terms-of-service">Terms of service</a>
+                {{ m.rawSubmit(f, 'Accept the Terms of Service and Register') }}
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

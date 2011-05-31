@@ -1,0 +1,218 @@
+{% macro field(field) %}
+    <div class="form_field">
+        {{ field.label }}
+    {% if field.errors %}
+        {% set css_class = 'has_error ' + kwargs.pop('class', '') %}
+        {{ field(class=css_class, **kwargs) }}
+        <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+    {% else %}
+        {{ field(**kwargs) }}
+    {% endif %}
+    {% if field.description %}
+    <span class="field_description">{{ field.description }}</span>
+    {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro rawField(field) %}
+    {% if field.errors %}
+        {% set css_class = 'has_error ' + kwargs.pop('class', '') %}
+        {{ field(class=css_class, **kwargs) }}
+        <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+    {% else %}
+        {{ field(**kwargs) }}
+    {% endif %}
+    {% if field.description %}
+    <span class="field_description">{{ field.description }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro loginField(field) %}
+    {% if field.errors %}
+    <fieldset>
+        <legend>{{kwargs['placeholder']}}</legend>
+        {% set css_class = 'has_error ' + kwargs.pop('class', '') %}
+        {{ field(class=css_class, **kwargs) }}
+        <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+    </fieldset>
+    {% else %}
+        {{ field(**kwargs) }}
+    {% endif %}
+    {% if field.description %}
+    <span class="field_description">{{ field.description }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro boxedField(field) %}
+    {% set outer_class = 'has_error' if field.errors else '' %}
+    <div class="form_field_box">
+        <fieldset class="{{outer_class}}">
+            {{field.label}}
+            {% if field.errors %}
+                {% set css_class = 'has_error ' + kwargs.pop('class', '') %}
+                {{ field(class=css_class, **kwargs) }}
+                <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+            {% else %}
+                {{ field(**kwargs) }}
+            {% endif %}
+        </fieldset>
+        {% if field.description %}
+        <span class="field_description">{{ field.description }}</span>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro tableField(field) %}
+    {% if field.errors %}
+    <tr>
+        <td colspan='2' class='has_error'>
+        <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+        </td>
+    </tr>
+    {% endif %}
+
+<tr class="form_field">
+    <td class="form_label">
+        {{ field.label }}
+        {% if field.flags.required %}<span style="color: red;">*</span>{% endif %}
+
+    {% if field.description %}
+    <div class="field_description">{{ field.description }}</div>
+    {% endif %}
+    </td>
+    <td>
+        {{ field(**kwargs) }}
+    </td>
+    </tr>
+{% endmacro %}
+
+{% macro rawButton(id, text) %}
+        <input type='button' id='{{ id }}' value='{{ text }}'/>
+{% endmacro %}
+
+{% macro rawSubmit(form, text) %}
+        <input type='submit' name='{{ form.getFormName() }}' value='{{ text }}'/>
+{% endmacro %}
+
+
+{% macro submit(form, text) %}
+    <div class="form_field">
+        <span>&nbsp;</span>
+        {{ rawSubmit(form, text) }}
+    </div>
+{% endmacro %}
+
+{% macro space() %}
+    <div class="form_field">
+        <span>&nbsp;</span>
+        <input type='button' style='border:0;'/>
+    </div>
+{% endmacro %}
+
+
+<!-- WTForm widget macros -->
+{% macro profileImageWidget(field) %}
+<style>
+</style>
+<script>$(pomke.partial(sp.ProfileImage, '{{field.id}}'));</script>
+<div class="profileImage" id="{{field.id}}_profileImage">
+    <div class='aHead'><a href='#'>Select a groovy default avatar</a></div>
+    <div class="imageStream profile">
+        <div class="imageRow">
+            <div class="avatar" title="Girl Brown"><img src="/images/avatar_kidG_brown.jpg"/></div>
+            <div class="avatar" title="Girl Red"><img src="/images/avatar_kidG_red.jpg"/></div>
+            <div class="avatar" title="Girl Blonde"><img src="/images/avatar_kidG_blonde.jpg"/></div>
+            <div class="avatar" title="Girl Black"><img src="/images/avatar_kidG_black.jpg"/></div>
+        </div>
+        <div class="imageRow">
+            <div class="avatar" title="Anime Aqua"><img src="/images/avatar_anime_blue.jpg"/></div>
+            <div class="avatar" title="Anime Orange"><img src="/images/avatar_anime_orange.jpg"/></div>
+            <div class="avatar" title="Anime Green"><img src="/images/avatar_anime_green.jpg"/></div>
+            <div class="avatar" title="Anime Purple"><img src="/images/avatar_anime_purple.jpg"/></div>
+        </div>
+        <div class="imageRow">
+            <div class="avatar" title="Foxy Red"><img src="/images/avatar_furry_red.jpg"/></div>
+            <div class="avatar" title="Foxy White"><img src="/images/avatar_furry_white.jpg"/></div>
+            <div class="avatar" title="Foxy Black"><img src="/images/avatar_furry_black.jpg"/></div>
+            <div class="avatar" title="Foxy Grey"><img src="/images/avatar_furry_grey.jpg"/></div>
+        </div>
+        <div class="imageRow">
+            <div class="avatar" title="Old Chap Aqua"><img src="/images/avatar_oldChap_blue.jpg"/></div>
+            <div class="avatar" title="Old Chap Orange"><img src="/images/avatar_oldChap_orange.jpg"/></div>
+            <div class="avatar" title="Old Chap Green"><img src="/images/avatar_oldChap_green.jpg"/></div>
+            <div class="avatar" title="Old Chap Purple"><img src="/images/avatar_oldChap_purple.jpg"/></div>
+        </div>
+        <div class="imageRow">
+            <div class="avatar" title="Woman Brown"><img src="/images/avatar_woman_brown.jpg"/></div>
+            <div class="avatar" title="Woman Red"><img src="/images/avatar_woman_red.jpg"/></div>
+            <div class="avatar" title="Woman Blonde"><img src="/images/avatar_woman_blonde.jpg"/></div>
+            <div class="avatar" title="Woman Black"><img src="/images/avatar_woman_black.jpg"/></div>
+        </div>
+    </div>
+    <div class='aHead'><a href='#'>Or make your own avatar</a></div>
+    <div>
+        <h1>Coming Soon..</h1>
+    </div>
+</div>
+<input type='hidden' value='{{field.data}}' name='{{field.id}}' id='{{field.id}}'/>
+{% endmacro %}
+
+{% macro tagWidget(field) %}
+<style>
+</style>
+<script>$(pomke.partial(sp.TaggingWidget, '{{field.id}}'));</script>
+<div class="tagBox" id="{{field.id}}_tagBox"></div>
+<input type='text' name='{{field.id}}_complete' id='{{field.id}}_complete'/>
+<input type='hidden' name='{{field.id}}' id='{{field.id}}'/>
+<img src="/images/add.png" id="{{field.id}}_addTag"/>
+{% endmacro %}
+
+{% macro imageUploadWidget() %}
+<script>$(pomke.partial(sp.UploadWidget));</script>
+<div id="uploadForm">
+    <form id="upload" name="upload" enctype="multipart/form-data"
+        action="/upload" target="uploadframe" method="post">
+        <input type="hidden" name="MAX_FILE_SIZE" value="30000000"  />
+        <input id="userfile" name="userfile" type="file" label="fileupload" />
+    </form>
+    <iframe id="uploadframe" name="uploadframe" width="0" height="0" frameborder="0" border="0" src="about:blank"></iframe>
+</div>
+<div id="progress"></div>
+<div class="previewBox hidden"></div>
+{% endmacro %}
+
+
+{% macro copyrightWidget(field, intro, name) %}
+<script>$(pomke.partial(copyrightWidget));</script>
+<div class="copyright_panel">
+    <div class='blurb'>{{intro}}</div>
+    <div id='ac' class="attributes">
+        <input id='c' name='lt' type='radio'/><label for='c'>(c) {{intro}} 2010</label>
+    </div>
+    <div id='ac' class="attributes">
+        <input id='pd' name='lt' type='radio'/><label for='pd'>Public Domain</label>
+    </div>
+</div>
+<div id='ccPanel' class="attribute_panel">
+    <div class='blurb'>Optionally, select what people can and can't do with your artwork <a target='_blank' href='http://creativecommons.org'>learn more..</a></div>
+    <div id='aby' class="attributes disabled"><img width="32" height="32" border="0" alt="Attribution" src="/images/by.gif">
+        <div><input id='by' type='checkbox'/><strong>Attribution</strong></div>
+        <p>You let others copy, distribute, display, and perform your copyrighted work &mdash;  and derivative works based upon it &mdash;  but only if they give credit the way you request.</p>
+    </div>
+    <div id='anc' class="attributes disabled"><img width="32" height="32" border="0" alt="Noncommercial" src="/images/nc.gif">
+        <div><strong><input id='nc' type='checkbox'/>Non-Commercial</strong></div>
+        <p>You let others copy, distribute, display, and perform your work &mdash; and derivative works based upon it &mdash; but for non-commercial purposes only.</p>
+    </div>
+    <div id='asa' class="attributes disabled"><img width="32" height="32" border="0" alt="Share Alike" src="/images/sa.gif">
+        <div><strong><input id='sa' type='checkbox'/>Share Alike</strong></div>
+        <p>You allow others to distribute derivative works only under a license identical to the license that governs your work.</p>
+    </div>
+    <div id='and' class="attributes disabled"><img width="32" height="32" border="0" alt="No Derivative Works" src="/images/nd.gif">
+        <div><input id='nd' type='checkbox'/><strong>No Derivative Works</strong></div>
+        <p>You let others copy, distribute, display, and perform only verbatim copies of your work, not derivative works based upon it.</p>
+    </div>
+    <div class='clear'></div>
+    <div id='ccBar'></div>
+    <input type='hidden' id='{{field.id}}' name='{{field.id}}' value='{{field.default}}'/>
+</div>
+{% endmacro %}

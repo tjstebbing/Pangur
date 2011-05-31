@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="60.0000000"
+   id="svg1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="logo.svg"
+   sodipodi:version="0.32"
+   version="1.0"
+   width="60.0000000"
+   x="0"
+   y="0"
+   inkscape:export-filename="/home/pomke/code/pangurpad/static/images/mini-note.png"
+   inkscape:export-xdpi="27.234043"
+   inkscape:export-ydpi="27.234043">
+  <metadata
+     id="metadata4169">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title></dc:title>
+        <dc:description />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>hash</rdf:li>
+            <rdf:li />
+            <rdf:li>action</rdf:li>
+            <rdf:li>computer</rdf:li>
+            <rdf:li>icons</rdf:li>
+            <rdf:li>theme</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org">
+            <dc:title>Danny Allen</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Danny Allen</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Danny Allen</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     bordercolor="#666666"
+     borderopacity="1.0"
+     id="base"
+     inkscape:cx="11.36689"
+     inkscape:cy="46.254133"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:window-height="697"
+     inkscape:window-width="1366"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:zoom="15.26093"
+     pagecolor="#ffffff"
+     showguides="true"
+     snaptoguides="true"
+     showgrid="false"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs3" />
+  <rect
+     style="fill:#000000;fill-opacity:1;stroke:none"
+     id="rect3864"
+     width="31.402397"
+     height="24.649927"
+     x="7.6888247"
+     y="23.488453"
+     rx="0" />
+  <g
+     id="g3814"
+     transform="matrix(0.13701809,0,0,0.13701809,33.554854,2.5009494)"
+     inkscape:export-filename="/home/pomke/code/Pangur/examples/listful/logo.png"
+     inkscape:export-xdpi="1316.0699"
+     inkscape:export-ydpi="1316.0699">
+    <g
+       transform="translate(-121.54054,-19.951379)"
+       id="g3020">
+      <rect
+         height="49.740261"
+         id="rect830"
+         rx="2"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#a0a0a0;stroke-width:3.12500000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         transform="matrix(0,-1,1,0,0,0)"
+         width="36.64539"
+         x="-48.802795"
+         y="5.4132142" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,21.255134 35.881944,0"
+         id="path828"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:0.7;fill:#0000ff;stroke:#5200e4;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,30.480103 35.881944,0"
+         id="path829"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:1;fill:none;stroke:#a0a0a0;stroke-width:3.12500000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,39.70507 18.577177,0"
+         id="path830"
+         sodipodi:nodetypes="cc"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:1;fill:none;stroke:#a0a0a0;stroke-width:3.12500000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <g
+       transform="translate(-5.9039795,-9.3649329)"
+       inkscape:export-ydpi="27.234043"
+       inkscape:export-xdpi="27.234043"
+       inkscape:export-filename="/home/pomke/code/pangurpad/static/images/really-mini-note.png"
+       id="g3026">
+      <rect
+         height="49.740261"
+         id="rect830-2"
+         rx="1.0282633"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#a0a0a0;stroke-width:2.24071812999999986;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         transform="matrix(0,-1,1,0,0,0)"
+         width="18.840557"
+         x="-48.802795"
+         y="-47.87529" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m -40.946134,36.480105 35.8819441,0"
+         id="path829-0"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:0.7;fill:#0000ff;stroke:#5200e4;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m -40.946134,43.705072 18.577177,0"
+         id="path830-5"
+         sodipodi:nodetypes="cc"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:1;fill:none;stroke:#a0a0a0;stroke-width:3.12500000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <path
+       style="font-size:12px;fill:#a0a0a0;fill-rule:evenodd;stroke:#787878;stroke-width:3.58264065000000009;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       sodipodi:stroke-cmyk="(0 0 0 0.8)"
+       sodipodi:nodetypes="ccccccc"
+       id="path968"
+       d="m -84.227026,3.5441114 c 9.0282,19.8037896 24.317891,19.8120656 24.463506,19.8120656 l 0,-6.552724 8.809774,10.557166 -8.882581,8.882583 0,-6.625533 c 0,0 -21.187144,3.200451 -24.390699,-26.0735576 z"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     id="g3884"
+     transform="matrix(0.13701809,0,0,0.13701809,32.307623,5.1763594)"
+     inkscape:export-filename="/home/pomke/code/Pangur/examples/listful/favicon.png"
+     inkscape:export-xdpi="337.63721"
+     inkscape:export-ydpi="337.63721">
+    <g
+       transform="translate(-123.53347,38.087975)"
+       id="g3020-4">
+      <rect
+         height="49.740261"
+         id="rect830-1"
+         rx="2"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#a0a0a0;stroke-width:3.12500000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         transform="matrix(0,-1,1,0,0,0)"
+         width="36.64539"
+         x="-48.802795"
+         y="5.4132142" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,21.255134 35.881944,0"
+         id="path828-9"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:0.7;fill:#0000ff;stroke:#5200e4;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,30.480103 35.881944,0"
+         id="path829-09"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:1;fill:none;stroke:#a0a0a0;stroke-width:3.12500000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,39.70507 18.577177,0"
+         id="path830-8"
+         sodipodi:nodetypes="cc"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:1;fill:none;stroke:#a0a0a0;stroke-width:3.12500000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <path
+       style="font-size:12px;fill:#a0a0a0;fill-rule:evenodd;stroke:#787878;stroke-width:3.58264065000000009;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       sodipodi:stroke-cmyk="(0 0 0 0.8)"
+       sodipodi:nodetypes="ccccccc"
+       id="path968-3"
+       d="m -92.846769,76.439517 c 9.0282,19.80379 24.317891,19.812066 24.463506,19.812066 l 0,-6.552724 8.809774,10.557161 -8.882581,8.88259 0,-6.62554 c 0,0 -21.187144,3.20046 -24.390699,-26.073553 z"
+       inkscape:connector-curvature="0" />
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-size:1.64421701px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="6.4573236"
+     y="14.493792"
+     id="text3892"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3894"
+       x="6.4573236"
+       y="14.493792">favicon</tspan><tspan
+       sodipodi:role="line"
+       x="6.4573236"
+       y="16.549063"
+       id="tspan3900">32x32</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:1.64421701px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="5.7365012"
+     y="3.5386317"
+     id="text3896"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3898"
+       x="5.7365012"
+       y="3.5386317">logo</tspan><tspan
+       sodipodi:role="line"
+       x="5.7365012"
+       y="5.5939031"
+       id="tspan3935">230 x 100</tspan></text>
+  <path
+     style="fill:none;stroke:#000000;stroke-width:0.13701808px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 35.641787,10.448213 -30.4612278,0"
+     id="path3902"
+     inkscape:connector-curvature="0" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:0.13701808px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 15.334301,0.79657745 0,19.35905755"
+     id="path3904"
+     inkscape:connector-curvature="0" />
+  <g
+     id="g3814-9"
+     transform="matrix(0.13701809,0,0,0.13701809,27.698061,26.606828)"
+     inkscape:export-filename="/home/pomke/code/Pangur/examples/listful/logo.png"
+     inkscape:export-xdpi="704.30591"
+     inkscape:export-ydpi="704.30591">
+    <g
+       transform="translate(-121.54054,-19.951379)"
+       id="g3020-7">
+      <rect
+         height="49.740261"
+         id="rect830-9"
+         rx="2"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="fill:#ffffff;fill-opacity:1;stroke:#a0a0a0;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         transform="matrix(0,-1,1,0,0,0)"
+         width="36.64539"
+         x="-48.802795"
+         y="5.4132142" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,21.255134 35.881944,0"
+         id="path828-2"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:0.7;fill:#0000ff;stroke:#5200e4;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,30.480103 35.881944,0"
+         id="path829-8"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="fill:none;stroke:#a0a0a0;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,39.70507 18.577177,0"
+         id="path830-9"
+         sodipodi:nodetypes="cc"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="fill:none;stroke:#a0a0a0;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <g
+       transform="translate(-5.9039795,-9.3649329)"
+       inkscape:export-ydpi="27.234043"
+       inkscape:export-xdpi="27.234043"
+       inkscape:export-filename="/home/pomke/code/pangurpad/static/images/really-mini-note.png"
+       id="g3026-9">
+      <rect
+         height="49.740261"
+         id="rect830-2-8"
+         rx="1.0282633"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="fill:#ffffff;fill-opacity:1;stroke:#a0a0a0;stroke-width:2.24071813;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         transform="matrix(0,-1,1,0,0,0)"
+         width="18.840557"
+         x="-48.802795"
+         y="-47.87529" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m -40.946134,36.480105 35.8819441,0"
+         id="path829-0-9"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:0.7;fill:#0000ff;stroke:#5200e4;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m -40.946134,43.705072 18.577177,0"
+         id="path830-5-3"
+         sodipodi:nodetypes="cc"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="fill:none;stroke:#a0a0a0;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <path
+       style="font-size:12px;fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:#787878;stroke-width:3.58264065;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:stroke-cmyk="(0 0 0 0.8)"
+       sodipodi:nodetypes="ccccccc"
+       id="path968-6"
+       d="m -84.227026,3.5441114 c 9.0282,19.8037896 24.317891,19.8120656 24.463506,19.8120656 l 0,-6.552724 8.809774,10.557166 -8.882581,8.882583 0,-6.625533 c 0,0 -21.187144,3.200451 -24.390699,-26.0735576 z"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     id="g3884-3"
+     transform="matrix(0.13701809,0,0,0.13701809,26.45083,29.282238)"
+     inkscape:export-filename="/home/pomke/code/Pangur/examples/listful/favicon.png"
+     inkscape:export-xdpi="180.76335"
+     inkscape:export-ydpi="180.76335">
+    <g
+       transform="translate(-123.53347,38.087975)"
+       id="g3020-4-6">
+      <rect
+         height="49.740261"
+         id="rect830-1-0"
+         rx="2"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="fill:#ffffff;fill-opacity:1;stroke:#a0a0a0;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         transform="matrix(0,-1,1,0,0,0)"
+         width="36.64539"
+         x="-48.802795"
+         y="5.4132142" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,21.255134 35.881944,0"
+         id="path828-9-4"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="opacity:0.7;fill:#0000ff;stroke:#5200e4;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,30.480103 35.881944,0"
+         id="path829-09-4"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="fill:none;stroke:#a0a0a0;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         d="m 12.342372,39.70507 18.577177,0"
+         id="path830-8-9"
+         sodipodi:nodetypes="cc"
+         sodipodi:stroke-cmyk="(0.0000000 0.0000000 0.0000000 0.80000001)"
+         style="fill:none;stroke:#a0a0a0;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <path
+       style="font-size:12px;fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:#787878;stroke-width:3.58264065;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:stroke-cmyk="(0 0 0 0.8)"
+       sodipodi:nodetypes="ccccccc"
+       id="path968-3-6"
+       d="m -92.846769,76.439517 c 9.0282,19.80379 24.317891,19.812066 24.463506,19.812066 l 0,-6.552724 8.809774,10.557161 -8.882581,8.88259 0,-6.62554 c 0,0 -21.187144,3.20046 -24.390699,-26.073553 z"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+About Listful:
+
+Listful is an example application that shows the basic ideas behind the 
+pangur microframework. Listful is also a handy little tool for collaborative 
+task management.
+
+Trying it out:
+
+You can run listful with two very easy commands, the first creates the Listful
+database (sqlite by default), the second runs a development server on port 8000
+
+> pangur setupdb listful
+> pangur run listful
+
+Deploying it:
+
+I like to use gunicorn to deploy my pangur apps behind nginx, see gunicorn.org
+for more info, included is a basic gunicorn.conf for running the app that way.
+Of course there are a bajillion ways you can deploy pangur as it is a WSGI app,
+here are some more ideas: wsgi.org/wsgi/Servers
+

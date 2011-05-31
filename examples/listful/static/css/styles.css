@@ -1,0 +1,122 @@
+body {
+    font: 13px/1.6 arial;
+    margin: 0px;
+    padding: 0px;
+}
+
+.fleft {
+    float: left;
+}
+
+.fright {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.hidden {
+    display: none;
+}
+
+.corners {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+strong {
+    font-weight: bold;
+    color: #bc3f45;
+}
+
+
+h1 { 
+    color: #777;
+    font-size: 80px;
+    font-family: 'Aclonica', arial, serif;
+}
+
+.placeholder, ::-webkit-input-placeholder {
+    color: #333;
+    margin-left: 0.5em;
+}
+/* Duplicated for moz because the moz selector breaks webkit */
+input:-moz-placeholder {
+    color: #333;
+    margin-left: 0.5em;
+}
+
+
+.loginPage {
+    margin: 0 auto;
+}
+
+.loginRegisterBox {
+    text-align: center;
+    margin: 0 auto;
+    width: 400px;
+    right: 10px;
+
+}
+
+
+.registerBox, .loginBox {
+    width: 300px;
+    min-height: 200px;
+    margin: 2em auto 0 auto;
+    padding: 0.5em 1em;
+}
+
+.loginBox {
+    min-height: 30px;
+    height: 30px;
+    width: 300px;
+}
+
+.loginRegisterBox input[type=text],
+.loginRegisterBox input[type=password] {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    padding: 5px;
+    color: #333;
+    width:95px;
+    font-size: 13px;
+    background-color: #eee;
+    border: 1px solid silver;
+}
+
+.registerBox input[type=submit] {
+    margin-top: 1em;
+    display: block;
+}
+.registerBox input[type=password],
+.registerBox input[type=text] {
+    margin-top: 0.5em;
+    width: 285px;
+    font-size: 16px;
+    padding: 9px 7px 10px 7px;
+}
+
+.registerBox input[type=password].has_error,
+.registerBox input[type=text].has_error {
+    margin-top: 0;
+}
+
+.registerBox .tosLink  {
+    float:right;
+    margin-right: 1em;
+}
+
+.registerToggle {
+    display: block;
+}
+
+.registerBox .errors {
+    background-color: #ba1f25;
+    color: #3b1816;
+    font-weight: bold;
+}
+
+
+

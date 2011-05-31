@@ -4,6 +4,7 @@ from werkzeug import exceptions, redirect
 NotFound = exceptions.NotFound
 
 class RedirectException(HTTPException):
+    """Raise this to perform a redirect"""
 
     def __init__(self, location):
         self.location = location
@@ -14,3 +15,6 @@ class RedirectException(HTTPException):
     def handler(self, request):
         # str() to avoid unicode, which suffers IRI encoding.
         request.response = redirect(str(self.location))
+
+
+
