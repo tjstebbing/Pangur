@@ -1,6 +1,8 @@
 $(function() {
     $(".button, input:submit, input:button").button();
-    $(".newList").click(listful.ListView);
+    $(".newList").click(function() {
+        listful.createNewList().addCallback(listful.ListView);
+    });
 });
 
 listful = module('listful');
@@ -13,6 +15,13 @@ String.prototype.format = function() {
     }
     return formatted;
 };
+
+listful.createNewList = function() {
+    var d = pomke.Deferred();
+    $.post("/api/list/update", {data:$.toJSON({})}, d.callback,'json');
+    return d;
+};
+
 
 listful.load = function(path, sel) {
     var tmp = $('<div>');
@@ -41,6 +50,15 @@ listful.ListView = klass({
 
     loaded : function(el) {
         this.box = el;
+        this.newTaskInput = $('.newTaskInput', el);
+        var self = this;
+        this.newTaskInput.keypress(function(ev) { 
+            if(ev.keyCode == 13) { 
+                var d = self.createTask()
+                d.addCallback(self.loadList);
+                d.addCallback(self.listLoaded);
+            } 
+        });
         if(this.list.x != undefined && this.list.y != undefined) {
             var position = [this.list.x, this.list.y];
         } else { 
@@ -61,6 +79,29 @@ listful.ListView = klass({
         this.box.dialog(opts);
     },
 
+    createTask : function() {
+        var text = this.newTaskInput.text();
+        var d = pomke.Deferred();
+        var data = { text : this.newTaskInput.attr('value'),
+        listId : this.list.id };
+        $.post("/api/task/update", {data:$.toJSON(data)}, d.callback,'json');
+        return d;
+    },
+
+    loadList : function() {
+        var d = pomke.Deferred();
+        var data = {id : this.list.id};
+        $.post("/api/tasksForList", {data:$.toJSON(data)}, d.callback,'json');
+        return d;
+    },
+    
+    listLoaded : function(data) {
+        this.newTaskInput.attr('value','');
+        for(var i=0; i < data.length; i++) {
+            pomke.log(data[i]);
+        }
+    },
+
     save : function() {
         var dialog = this.box.parent();
         var coords = dialog.offset();
@@ -72,7 +113,7 @@ listful.ListView = klass({
             y : coords.top,
             x : coords.left};
         var d = pomke.Deferred();
-        $.post("/api/list/update", {data:$.toJSON(data)}, d.callback);
+        $.post("/api/list/update", {data:$.toJSON(data)}, d.callback,'json');
         return d;
     }
 

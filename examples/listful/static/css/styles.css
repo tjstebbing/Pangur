@@ -119,4 +119,17 @@ input:-moz-placeholder {
 }
 
 
+.listBox.ui-dialog-content.ui-widget-content {
+    padding: 0px;
+    margin: 0px;
+}
 
+.newTaskInput {
+    margin: 0px;
+    padding: 5px;
+    color: #333;
+    width:100%;
+    font-size: 13px;
+    background-color: #eee;
+    border: 1px solid silver;
+}
