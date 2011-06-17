@@ -63,7 +63,8 @@ def application(request):
         templateVars = prepareToRender(request)
         #handle authRequired resource when user is not logged in
         if values['authRequired'] and not request.session.authenticated:
-            raise RedirectException('/login?from='+request.path)
+            raise RedirectException(
+                conf.URLS.login.format(fromPath=request.path))
         if (not permission
             or getattr(request.session.user, permission, None)):
             #we are allowed to be here so..
@@ -84,12 +85,13 @@ def application(request):
                     request.response.data = data
         elif request.session.authenticated:
             #we are logged in but should not be here, oops!
-            template = templates.get_template("oops.html")
+            template = templates.get_template(conf.URLS.no_permissions)
             request.response.data = template.render(**templateVars)
         else:
             #you are not logged in, eek, return to home, do not pass go
             #do not collect $200-
-            raise RedirectException('/login?from='+request.path)
+            raise RedirectException(
+                conf.URLS.login.format(fromPath=request.path))
 
     except NotFound, e:
         # let the static file server respond or 404.

@@ -15,7 +15,8 @@ conf.URLS = Config()
 conf.dev = Config()
 
 conf.debug = False
-conf.URLS.login = "/login"
+conf.URLS.login = "/login?from={fromPath}"
+conf.URLS.no_permissions = "/oops"
 conf.db.name = ""
 conf.db.user = ""
 conf.db.pwd = ""
