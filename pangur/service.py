@@ -1,10 +1,10 @@
 from werkzeug import Request, Response
 from werkzeug.exceptions import NotFound
-from jinja2 import Environment, PrefixLoader, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, ext
 
 from pangur import session, utils, database, plugin, staticfiles
 from pangur.exceptions import HTTPException, RedirectException
-from pangur.utils import map, FormsRegistry
+from pangur.utils import FormsRegistry
 
 #grevious bodily hack, because jinja cant access __names  c_c
 import wtforms
@@ -31,7 +31,8 @@ def init(config, _package_=None):
         plugin.importPackage(_package_)
     #make jinja template environment.
     template_paths = conf.paths.templates + utils.templatePaths
-    templates = Environment(loader=FileSystemLoader(template_paths))
+    templates = Environment(loader=FileSystemLoader(template_paths),
+                            extensions=['pangur.service.JinjaUid'])
     #print '\n'.join(templates.list_templates(filter_func=lambda n: not n.startswith('.')))
     #map static files.
     static = staticfiles.FileServer(utils.staticPaths)
@@ -106,3 +107,14 @@ def application(request):
             return e
     request.txn.commit()
     return request.response
+
+
+class JinjaUid(ext.Extension):
+    """Adds a uid() global function that returns a unique id."""
+    def __init__(self, environment):
+        ext.Extension.__init__(self, environment)
+        environment.globals['uid'] = self.nextId
+        self.id = 0
+    def nextId(self):
+        self.id += 1
+        return self.id
