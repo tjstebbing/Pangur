@@ -91,7 +91,7 @@ class LoginException(HTTPException):
     """Raise this when a user successfully authenticates"""
 
     def __init__(self, username, location):
-        self.username = username
+        self.username = username.lower()
         self.location = location
 
     def __str__(self):
@@ -118,6 +118,7 @@ class LogoutException(HTTPException):
 
 def createUser(request, username, password):
     """Create a basic user, hashing their password"""
+    username = username.lower()
     if request.txn.query(User).filter_by(username=username).first():
         return False
     user = User(username, hashPassword(password))
@@ -125,6 +126,7 @@ def createUser(request, username, password):
     return user
 
 def validateCredentials(request, username, password):
+    username = username.lower()
     usr = request.txn.query(User).filter_by(username=username).first()
     if usr:
         return checkPassword(password, usr.password)
