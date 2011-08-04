@@ -32,6 +32,7 @@ def init(config, _package_=None):
     #make jinja template environment.
     template_paths = conf.paths.templates + utils.templatePaths
     templates = Environment(loader=FileSystemLoader(template_paths),
+                            autoescape=True,
                             extensions=['pangur.service.JinjaUid'])
     #print '\n'.join(templates.list_templates(filter_func=lambda n: not n.startswith('.')))
     #map static files.
