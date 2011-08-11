@@ -67,8 +67,7 @@ def application(request):
         if values['authRequired'] and not request.session.authenticated:
             raise RedirectException(
                 conf.URLS.login.format(fromPath=request.path))
-        if (not permission
-            or getattr(request.session.user, permission, None)):
+        if not permission or request.session.user.hasPermission(permission):
             #we are allowed to be here so..
             if templateName and callable(func):
                 #call function and merge returned dict with templateVars

@@ -17,5 +17,20 @@ class User(object):
         self.username = username
         self.password = password
 
+    def hasPermission(self, permission):
+        """
+        Check if this user has a permission specified by dot path.
 
+        Examples:
+            user.hasPermission("admin")
+            user.hasPermission("account.active")
+
+        In this example, the user's Account ORM class has installed a backref
+        named 'account' on User objects, and this permission check traverses
+        the relationship.
+        """
+        obj = self
+        for perm in permission.split('.'):
+            obj = getattr(obj, perm, None)
+        return bool(obj)
 

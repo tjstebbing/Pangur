@@ -390,7 +390,7 @@ def timesince(d, now=None):
         if d.tzinfo:
             now = datetime.datetime.now(d)
         else:
-            now = datetime.datetime.now()
+            now = datetime.datetime.utcnow()
 
     # ignore microsecond part of 'd' since we removed it from 'now'
     delta = now - (d - datetime.timedelta(0, 0, d.microsecond))
