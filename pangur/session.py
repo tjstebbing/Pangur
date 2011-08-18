@@ -165,4 +165,9 @@ def encodeUsername(username):
 
 def decodeUsername(token):
     """Decode a username from a cookie transport token."""
-    return b64decode(token).decode('utf-8')
+    try:
+        return b64decode(token).decode('utf-8')
+    except TypeError:
+        # XXX deployment fix: old cookies were not base64 encoded,
+        # avoid errors when we release the new version.
+        return token
