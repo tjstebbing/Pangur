@@ -1,3 +1,4 @@
+from urllib import quote_plus
 from werkzeug import Request, Response
 from werkzeug.exceptions import NotFound
 from jinja2 import Environment, FileSystemLoader, ext
@@ -65,8 +66,9 @@ def application(request):
         templateVars = prepareToRender(request)
         #handle authRequired resource when user is not logged in
         if values['authRequired'] and not request.session.authenticated:
+            path = quote_plus(request.path.encode('utf-8'))
             raise RedirectException(
-                conf.URLS.login.format(fromPath=request.path))
+                conf.URLS.login.format(fromPath=path))
         if not permission or request.session.user.hasPermission(permission):
             #we are allowed to be here so..
             if templateName and callable(func):

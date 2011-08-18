@@ -7,14 +7,14 @@ class RedirectException(HTTPException):
     """Raise this to perform a redirect"""
 
     def __init__(self, location):
-        self.location = location
+        # str() to avoid unicode, which suffers IRI encoding.
+        self.location = str(location)
 
     def __str__(self):
         return self.location
 
     def handler(self, request):
-        # str() to avoid unicode, which suffers IRI encoding.
-        request.response = redirect(str(self.location))
+        request.response = redirect(self.location)
 
 
 

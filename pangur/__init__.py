@@ -6,7 +6,7 @@ from .passwd import checkPassword, hashPassword
 from .exceptions import RedirectException, HTTPException, NotFound
 from .database import rel, backref, orMap, mapper, setAttrs, DBMeta
 from .session import (LoginException, LogoutException, createUser,
-                      validateCredentials)
+                      validateCredentials, userExists, normalizeUsername)
 from .utils import (map, registerForm, registerStatic, registerTemplates,
                     relative, slugify, pluralize, timesince, populateFromForm,
                     jinjaWidget, registryDecorator)

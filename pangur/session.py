@@ -29,7 +29,8 @@ you have authenticated in yur own way.
 """
 
 from datetime import datetime, timedelta
-import hmac
+from base64 import b64encode, b64decode
+import hmac, unicodedata
 
 from werkzeug.utils import redirect
 
@@ -69,25 +70,27 @@ class Session(object):
         return False
 
     def auth(self, username):
-        self.username = username
+        self.username = normalizeUsername(username)
         self.authenticated = True
 
     def cookieAuth(self):
-        self.username = self.request.cookies.get('nom')
+        token = self.request.cookies.get('nom')
+        self.username = decodeUsername(token or '')
         self.crumpet = self.request.cookies.get('crumpet')
-        if self.username and hash:
+        if token and self.crumpet:
             now = datetime.utcnow()
-            if compare(self.username, self.crumpet, now):
+            if compare(token, self.crumpet, now):
                 self.authenticated = True
-            elif compare(self.username, self.crumpet, now, -1):
+            elif compare(token, self.crumpet, now, -1):
                 self.authenticated = True
                 self.newCredentials(self.username)
             else:
                 self.blankCredentials()
 
     def newCredentials(self, username):
-        self.request.response.set_cookie('nom', username)
-        self.request.response.set_cookie('crumpet', hash(username,
+        token = encodeUsername(normalizeUsername(username))
+        self.request.response.set_cookie('nom', token)
+        self.request.response.set_cookie('crumpet', hash(token,
                                                          datetime.utcnow()))
     def blankCredentials(self):
         self.request.response.delete_cookie('nom')
@@ -98,7 +101,7 @@ class LoginException(HTTPException):
     """Raise this when a user successfully authenticates"""
 
     def __init__(self, username, location):
-        self.username = username.lower()
+        self.username = username
         self.location = location
 
     def __str__(self):
@@ -125,7 +128,8 @@ class LogoutException(HTTPException):
 
 def createUser(request, username, password):
     """Create a basic user, hashing their password"""
-    username = username.lower()
+    username = normalizeUsername(username)
+    password = password.strip()
     if request.txn.query(User).filter_by(username=username).first():
         return False
     user = User(username, hashPassword(password))
@@ -133,9 +137,32 @@ def createUser(request, username, password):
     return user
 
 def validateCredentials(request, username, password):
-    username = username.lower()
+    """Check if credentials match a User in the database."""
+    username = normalizeUsername(username)
+    password = password.strip()
     usr = request.txn.query(User).filter_by(username=username,
                                             enabled=True).first()
     if usr:
         return checkPassword(password, usr.password)
     return False
+
+def userExists(request, username):
+    """Check if a username exists in the database."""
+    username = normalizeUsername(username)
+    usr = request.txn.query(User).filter_by(username=username).first()
+    return (usr is not None)
+
+def normalizeUsername(username):
+    """Convert a username to canonical form for comparison."""
+    result = username.strip().lower()
+    if isinstance(result, unicode):
+        return unicodedata.normalize('NFKD', result)
+    return result
+
+def encodeUsername(username):
+    """Encode a username as a token for transport in cookies."""
+    return b64encode(username.encode('utf-8'))
+
+def decodeUsername(token):
+    """Decode a username from a cookie transport token."""
+    return b64decode(token).decode('utf-8')
