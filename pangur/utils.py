@@ -423,3 +423,9 @@ def populateFromForm(form, obj, fields):
 def jinjaWidget(field, **kwargs):
     """This is a WTForms widget that passes everything to a jinja macro"""
     return kwargs['macro'](field)
+
+def getIP(request):
+    """Get client IP address X-Forwarded-For path."""
+    # NB. this assumes you're always behind a proxy in production,
+    # otherwise X-Forwarded-For can be fake.
+    return request.headers.get('X-Forwarded-For') or request.remote_addr

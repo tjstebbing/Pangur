@@ -42,6 +42,7 @@ from .users import User
 from .passwd import checkPassword, hashPassword
 from .exceptions import HTTPException
 from .globals import conf
+from .utils import getIP
 
 secret = lambda n,o=-0: (conf.session.secret +
                             (n+timedelta(hours=o)).strftime("%Y%m%d%H"))
@@ -86,10 +87,12 @@ class Session(object):
         self._user = None # username changed.
         self.crumpet = self.request.cookies.get('crumpet')
         if self.username and self.crumpet:
+            # bind session cookie to IP address for extra security.
+            key = "%s:%s" % (token, getIP(self.request))
             now = datetime.utcnow()
-            if compare(token, self.crumpet, now):
+            if compare(key, self.crumpet, now):
                 self.authenticated = True
-            elif compare(token, self.crumpet, now, -1):
+            elif compare(key, self.crumpet, now, -1):
                 self.authenticated = True
                 self.newCredentials(self.username)
                 if conf.session.on_refresh:
@@ -103,8 +106,10 @@ class Session(object):
 
     def newCredentials(self, username):
         token = encodeUsername(normalizeUsername(username))
+        # bind session cookie to IP address for extra security.
+        key = "%s:%s" % (token, getIP(self.request))
         self.request.response.set_cookie('nom', token)
-        self.request.response.set_cookie('crumpet', hash(token,
+        self.request.response.set_cookie('crumpet', hash(key,
                                                          datetime.utcnow()))
 
     def blankCredentials(self):
