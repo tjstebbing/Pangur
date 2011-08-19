@@ -11,41 +11,46 @@ to make this a simple task:
 
 createUser(request, username, password):  will return a newly created user
 with those credentials and ensure that the password is sufficiently hashed
-so that it can be safely stored in the database.
+so that it can be safely stored in the database. Usernames can be any unicode
+text, which we normalize (see normalizeUsername) for comparing and storing.
 
 validateCredentials(request, username, password): will hash the provided
 password and check if it matches an existing user, returns a boolean.
 
-To login a user you just need to raise LoginException with the name of the
-user you would like to login, to logout simply raise LogoutException, both
+normalizeUsername(username): returns the normalized form of the username
+for comparison and storage. Strips leading and trailing whitespace, lower-
+cases the name and converts to Unicode NFKD form.
+
+To log in a user you just need to raise LoginException with the name of the
+user you would like to log in. To log out, simply raise LogoutException. Both
 take a 'location' parameter which will determine where to redirect the user
-after loging in or out.
+after logging in or out.
 
 In summary, you can use the createUser and validateCredentials helpers to
 easily manage creating and authenticating users, and then action login/logout
 requests with the above eceptions. If you need to implement a more complicated
-or different system you can implement that using our exceptions as well after
-you have authenticated in yur own way.
+or different system, you can implement that using our exceptions as well after
+you have authenticated in your own way.
 """
 
 from datetime import datetime, timedelta
-from base64 import b64encode, b64decode
-import hmac, unicodedata
+import hmac, unicodedata, urllib
 
 from werkzeug.utils import redirect
 
 from .users import User
 from .passwd import checkPassword, hashPassword
 from .exceptions import HTTPException
+from .globals import conf
 
-_s = "The Quick Spotty Skunk Jumped Over The Lazy Horned Owl"
-secret = lambda n,o=-0:(n+timedelta(hours=o)).strftime("%Y%m%d%H")
+secret = lambda n,o=-0: conf.secret+(n+timedelta(hours=o)).strftime("%Y%m%d%H")
 hash = lambda s, now, offset=-0: hmac.new(secret(now,offset), s).hexdigest()
 compare = lambda s, h, now, offset=-0: hash(s, now, offset) == h
 
 class Session(object):
 
     def __init__(self, request):
+        assert conf.secret, "must configure a session secret"
         self.request = request
         self._user = None
         self.username = None
@@ -77,7 +82,7 @@ class Session(object):
         token = self.request.cookies.get('nom')
         self.username = decodeUsername(token or '')
         self.crumpet = self.request.cookies.get('crumpet')
-        if token and self.crumpet:
+        if self.username and self.crumpet:
             now = datetime.utcnow()
             if compare(token, self.crumpet, now):
                 self.authenticated = True
@@ -160,14 +165,15 @@ def normalizeUsername(username):
     return result
 
 def encodeUsername(username):
-    """Encode a username as a token for transport in cookies."""
-    return b64encode(username.encode('utf-8'))
+    """Encode a username for transport in a cookie."""
+    bytes = username.encode('utf-8') # text to UTF-8 bytes.
+    return urllib.quote_plus(bytes) # now an ascii string.
 
 def decodeUsername(token):
-    """Decode a username from a cookie transport token."""
+    """Decode a username from cookie transport format."""
     try:
-        return b64decode(token).decode('utf-8')
-    except TypeError:
-        # XXX deployment fix: old cookies were not base64 encoded,
-        # avoid errors when we release the new version.
-        return token
+        token = str(token) # must be an ascii string.
+        bytes = urllib.unquote_plus(token) # now UTF-8 bytes.
+        return bytes.decode('utf-8') # now unicode text.
+    except Exception:
+        return None # invalid cookie token.

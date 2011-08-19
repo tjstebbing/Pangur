@@ -26,3 +26,4 @@ conf.db.path = "postgresql://{user}:{pwd}@{host}:{port}/{name}"
 conf.dev.port = 8000
 conf.dev.interface = "127.0.0.1"
 conf.dev.static_resources = {}
+conf.secret = "" # must provide your own session secret.
