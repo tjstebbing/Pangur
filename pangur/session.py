@@ -34,7 +34,7 @@ you have authenticated in your own way.
 """
 
 from datetime import datetime, timedelta
-import hmac, unicodedata, urllib
+import hmac, unicodedata
 
 from werkzeug.utils import redirect
 
@@ -44,10 +44,13 @@ from .exceptions import HTTPException
 from .globals import conf
 from .utils import getIP
 
+
 secret = lambda n,o=-0: (conf.session.secret +
                             (n+timedelta(hours=o)).strftime("%Y%m%d%H"))
-hash = lambda s, now, offset=-0: hmac.new(secret(now,offset), s).hexdigest()
+hash = lambda s, now, offset=-0: hmac.new(secret(now,offset),
+                                    s.encode('utf-8')).hexdigest()
 compare = lambda s, h, now, offset=-0: hash(s, now, offset) == h
+
 
 class Session(object):
 
@@ -82,34 +85,34 @@ class Session(object):
         self.authenticated = True
 
     def cookieAuth(self):
-        token = self.request.cookies.get('nom')
-        self.username = decodeUsername(token or '')
+        self.username = self.request.cookies.get('nom')
         self._user = None # username changed.
         self.crumpet = self.request.cookies.get('crumpet')
         if self.username and self.crumpet:
             # bind session cookie to IP address for extra security.
-            key = "%s:%s" % (token, getIP(self.request))
+            token = u"%s:%s" % (self.username, getIP(self.request))
             now = datetime.utcnow()
-            if compare(key, self.crumpet, now):
+            if compare(token, self.crumpet, now):
                 self.authenticated = True
-            elif compare(key, self.crumpet, now, -1):
-                self.authenticated = True
+            elif compare(token, self.crumpet, now, -1):
                 self.newCredentials(self.username)
-                if conf.session.on_refresh:
-                    # unfortunately a new Session calls cookieAuth before
-                    # it has been attached to its request.
-                    self.request.session = self # for callbacks.
-                    for func in conf.session.on_refresh:
-                        func(self.request)
+                # unfortunately a new Session calls cookieAuth before
+                # it has been attached to its request.
+                self.request.session = self # for callbacks.
+                for func in conf.session.on_refresh:
+                    func(self.request)
             else:
                 self.blankCredentials()
 
     def newCredentials(self, username):
-        token = encodeUsername(normalizeUsername(username))
+        """Generate a new session cookie and make the session logged in."""
+        self.username = normalizeUsername(username)
+        self._user = None # username changed.
+        self.authenticated = True
         # bind session cookie to IP address for extra security.
-        key = "%s:%s" % (token, getIP(self.request))
-        self.request.response.set_cookie('nom', token)
-        self.request.response.set_cookie('crumpet', hash(key,
+        token = u"%s:%s" % (self.username, getIP(self.request))
+        self.request.response.set_cookie('nom', username)
+        self.request.response.set_cookie('crumpet', hash(token,
                                                          datetime.utcnow()))
 
     def blankCredentials(self):
@@ -130,13 +133,8 @@ class LoginException(HTTPException):
     def handler(self, request):
         request.response = redirect(self.location)
         request.session.newCredentials(self.username)
-        if conf.session.on_login:
-            # make the session authenticated for callbacks.
-            request.session.username = self.username
-            request.session._user = None # username changed.
-            request.session.authenticated = True
-            for func in conf.session.on_login:
-                func(request)
+        for func in conf.session.on_login:
+            func(request)
 
 
 class LogoutException(HTTPException):
@@ -187,17 +185,3 @@ def normalizeUsername(username):
     if isinstance(result, unicode):
         return unicodedata.normalize('NFKD', result)
     return result
-
-def encodeUsername(username):
-    """Encode a username for transport in a cookie."""
-    bytes = username.encode('utf-8') # text to UTF-8 bytes.
-    return urllib.quote_plus(bytes) # now an ascii string.
-
-def decodeUsername(token):
-    """Decode a username from cookie transport format."""
-    try:
-        token = str(token) # must be an ascii string.
-        bytes = urllib.unquote_plus(token) # now UTF-8 bytes.
-        return bytes.decode('utf-8') # now unicode text.
-    except Exception:
-        return None # invalid cookie token.

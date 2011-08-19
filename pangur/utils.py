@@ -4,9 +4,12 @@ from collections import MutableMapping, namedtuple
 import re, datetime, inspect
 
 import werkzeug
+from werkzeug.urls import url_quote_plus, url_unquote_plus
 from werkzeug.routing import Map, Rule
 
 escape = werkzeug.escape # HTML escape.
+quote = url_quote_plus # Encode and escape unicode for URL.
+unquote = url_unquote_plus # Un-escape and decode URL fragment.
 
 
 url_map = Map()
