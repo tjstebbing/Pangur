@@ -13,6 +13,11 @@ conf.paths.templates = []
 conf.db = Config()
 conf.URLS = Config()
 conf.dev = Config()
+conf.session = Config()
+conf.session.secret = "" # must provide your own session secret.
+conf.session.on_login = []
+conf.session.on_logout = []
+conf.session.on_refresh = []
 
 conf.debug = False
 conf.URLS.login = "/login?from={fromPath}"
@@ -26,4 +31,3 @@ conf.db.path = "postgresql://{user}:{pwd}@{host}:{port}/{name}"
 conf.dev.port = 8000
 conf.dev.interface = "127.0.0.1"
 conf.dev.static_resources = {}
-conf.secret = "" # must provide your own session secret.

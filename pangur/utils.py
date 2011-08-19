@@ -3,7 +3,10 @@ from types import FunctionType, ClassType
 from collections import MutableMapping, namedtuple
 import re, datetime, inspect
 
+import werkzeug
 from werkzeug.routing import Map, Rule
+
+escape = werkzeug.escape # HTML escape.
 
 
 url_map = Map()

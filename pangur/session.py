@@ -43,14 +43,15 @@ from .passwd import checkPassword, hashPassword
 from .exceptions import HTTPException
 from .globals import conf
 
-secret = lambda n,o=-0: conf.secret+(n+timedelta(hours=o)).strftime("%Y%m%d%H")
+secret = lambda n,o=-0: (conf.session.secret +
+                            (n+timedelta(hours=o)).strftime("%Y%m%d%H"))
 hash = lambda s, now, offset=-0: hmac.new(secret(now,offset), s).hexdigest()
 compare = lambda s, h, now, offset=-0: hash(s, now, offset) == h
 
 class Session(object):
 
     def __init__(self, request):
-        assert conf.secret, "must configure a session secret"
+        assert conf.session.secret, "must configure a session secret"
         self.request = request
         self._user = None
         self.username = None
@@ -76,11 +77,13 @@ class Session(object):
 
     def auth(self, username):
         self.username = normalizeUsername(username)
+        self._user = None # username changed.
         self.authenticated = True
 
     def cookieAuth(self):
         token = self.request.cookies.get('nom')
         self.username = decodeUsername(token or '')
+        self._user = None # username changed.
         self.crumpet = self.request.cookies.get('crumpet')
         if self.username and self.crumpet:
             now = datetime.utcnow()
@@ -89,6 +92,12 @@ class Session(object):
             elif compare(token, self.crumpet, now, -1):
                 self.authenticated = True
                 self.newCredentials(self.username)
+                if conf.session.on_refresh:
+                    # unfortunately a new Session calls cookieAuth before
+                    # it has been attached to its request.
+                    self.request.session = self # for callbacks.
+                    for func in conf.session.on_refresh:
+                        func(self.request)
             else:
                 self.blankCredentials()
 
@@ -97,6 +106,7 @@ class Session(object):
         self.request.response.set_cookie('nom', token)
         self.request.response.set_cookie('crumpet', hash(token,
                                                          datetime.utcnow()))
+
     def blankCredentials(self):
         self.request.response.delete_cookie('nom')
         self.request.response.delete_cookie('crumpet')
@@ -115,6 +125,13 @@ class LoginException(HTTPException):
     def handler(self, request):
         request.response = redirect(self.location)
         request.session.newCredentials(self.username)
+        if conf.session.on_login:
+            # make the session authenticated for callbacks.
+            request.session.username = self.username
+            request.session._user = None # username changed.
+            request.session.authenticated = True
+            for func in conf.session.on_login:
+                func(request)
 
 
 class LogoutException(HTTPException):
@@ -127,6 +144,8 @@ class LogoutException(HTTPException):
         return self.location
 
     def handler(self, request):
+        for func in conf.session.on_logout:
+            func(request)
         request.response = redirect(self.location)
         request.session.blankCredentials()
 

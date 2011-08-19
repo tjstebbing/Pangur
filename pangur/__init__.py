@@ -9,6 +9,6 @@ from .session import (LoginException, LogoutException, createUser,
                       validateCredentials, userExists, normalizeUsername)
 from .utils import (map, registerForm, registerStatic, registerTemplates,
                     relative, slugify, pluralize, timesince, populateFromForm,
-                    jinjaWidget, registryDecorator)
+                    jinjaWidget, registryDecorator, escape)
 
 registerTemplates(__file__, 'templates')
