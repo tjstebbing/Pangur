@@ -111,7 +111,7 @@ class Session(object):
         self.authenticated = True
         # bind session cookie to IP address for extra security.
         token = u"%s:%s" % (self.username, getIP(self.request))
-        self.request.response.set_cookie('nom', username)
+        self.request.response.set_cookie('nom', self.username)
         self.request.response.set_cookie('crumpet', hash(token,
                                                          datetime.utcnow()))
 
