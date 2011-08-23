@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 
 from pangur.database import orMap, DBMeta
-
+from pangur.passwd import hashPassword
 
 userTable = sa.Table('users', DBMeta,
                      sa.Column('id', sa.Integer, primary_key=True),
@@ -15,7 +15,7 @@ class User(object):
 
     def __init__(self, username, password):
         self.username = username
-        self.password = password
+        self.setPassword(password)
 
     def hasPermission(self, permission):
         """
@@ -34,3 +34,7 @@ class User(object):
             obj = getattr(obj, perm, None)
         return bool(obj)
 
+    def setPassword(self, passwordString):
+        self.password = hashPassword(passwordString.strip())
+
+        

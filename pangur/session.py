@@ -156,10 +156,9 @@ class LogoutException(HTTPException):
 def createUser(request, username, password):
     """Create a basic user, hashing their password"""
     username = normalizeUsername(username)
-    password = password.strip()
     if request.txn.query(User).filter_by(username=username).first():
         return False
-    user = User(username, hashPassword(password))
+    user = User(username, password)
     request.txn.add(user)
     return user
 
