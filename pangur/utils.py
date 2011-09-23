@@ -1,15 +1,26 @@
 from os.path import join as opj, normpath as opn, dirname as opd
 from types import FunctionType, ClassType
 from collections import MutableMapping, namedtuple
+from urlparse import urljoin
 import re, datetime, inspect
 
 import werkzeug
-from werkzeug.urls import url_quote_plus, url_unquote_plus
+from werkzeug import urls
 from werkzeug.routing import Map, Rule
 
-escape = werkzeug.escape # HTML escape.
-quote = url_quote_plus # Encode and escape unicode for URL.
-unquote = url_unquote_plus # Un-escape and decode URL fragment.
+from .globals import conf
+
+quote = urls.url_quote_plus # percent escape, encode unicode.
+unquote = urls.url_unquote_plus # un-escape and decode to unicode.
+quote_path = urls.url_quote # preserve '/' and ':'
+url_encode = urls.url_encode # dict -> query args.
+
+
+def escape(s):
+    """Replace html special characters & < > and quotes " ' """
+    # NB. &apos; does not work in IE.
+    return (s.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+             .replace('"',"&quot;").replace("'","&#39;"))
 
 
 url_map = Map()
@@ -19,13 +30,15 @@ class PermRule(Rule):
     def __init__(self, string, defaults=None, subdomain=None, methods=None,
                  build_only=False, endpoint=None, strict_slashes=None,
                  redirect_to=None, permission=None, template=None, func=None,
-                 authRequired=False):
+                 authRequired=False, expires=None, mimetype=None):
         Rule.__init__(self, string, defaults, subdomain, methods, build_only,
                       endpoint, strict_slashes, redirect_to)
         self.permission = permission
         self.template = template
         self.func = func
         self.authRequired = authRequired
+        self.expires = expires
+        self.mimetype = mimetype
 
     def match(self, path):
         values = Rule.match(self, path)
@@ -34,6 +47,8 @@ class PermRule(Rule):
             values['permission'] = self.permission
             values['template'] = self.template
             values['func'] = self.func
+            values['expires'] = self.expires
+            values['mimetype'] = self.mimetype
         return values
 
 def map(rule, template=None, **kw):
@@ -320,11 +335,11 @@ def relative(request, path="", hash="", **kwargs):
     request.relative('bar', hash='b', foo=123)   example.com/1/2/bar?foo=123#b
     """
     path = opn(opj(request.path, path)).replace("\\","/")
+    path = quote_path(path) # percent escape, handle unicode.
     if kwargs:
-        path = "%s?%s" % (path,
-                          "&".join(['%s=%s' % (k,v) for k,v in kwargs.items()]))
+        path = "%s?%s" % (path, url_encode(kwargs))
     if hash:
-        path = "%s#%s" % (path, hash)
+        path = "%s#%s" % (path, quote(hash))
     return path
 
 
@@ -432,3 +447,17 @@ def getIP(request):
     # NB. this assumes you're always behind a proxy in production,
     # otherwise X-Forwarded-For can be fake.
     return request.headers.get('X-Forwarded-For') or request.remote_addr
+
+
+def readFile(name, mode="rt"):
+    """Read a file from the template directories."""
+    dirs = conf.paths.templates + templatePaths
+    for path in dirs:
+        try:
+            f = open(opj(path,name), mode)
+            text = f.read()
+            f.close()
+            return text
+        except IOError:
+            continue
+    raise IOError(2, "%s not found in %s" % (name, ', '.join(dirs)))

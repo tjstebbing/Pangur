@@ -57,7 +57,8 @@ def application(request):
         request.matches = values
         func = values['func']
         permission = values['permission']
-        request.response = Response(mimetype='text/html')
+        request.response = Response(
+            mimetype=values.get('mimetype') or 'text/html')
         request.conf = conf
         request.db = db_conn
         request.txn = request.db.begin()
