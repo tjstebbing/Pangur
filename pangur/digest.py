@@ -31,7 +31,7 @@ def digestAuthenticate(f):
             #aaaaaaaaaaaaaaaaaahhhhhhhhhhhhhhhhhhhh
             raise DigestAuthenticationException()
         #orrite then, off you go
-        request.session.auth(auth.username)
+        request.session.auth(user.id)
         f(request)
     return _
 

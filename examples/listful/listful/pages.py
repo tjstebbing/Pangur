@@ -32,8 +32,9 @@ def loginPage(request):
             if f.validate():
                 username = request.form['username']
                 password = request.form['password']
-                if validateCredentials(request, username, password):
-                    raise LoginException(username, '/lists')
+                user = validateCredentials(request, username, password)
+                if user:
+                    raise LoginException(user.id, '/lists')
                 else:
                     values["loginError"] = "Incorrect username or password."
 
@@ -50,7 +51,8 @@ def loginPage(request):
                     return values
                 else:
                     user = createUser(request, username, password)
-                    raise LoginException(username, '/lists')
+                    request.txn.commit() # and assign user.id
+                    raise LoginException(user.id, '/lists')
     return values
 
 

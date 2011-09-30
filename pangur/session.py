@@ -15,13 +15,13 @@ so that it can be safely stored in the database. Usernames can be any unicode
 text, which we normalize (see normalizeUsername) for comparing and storing.
 
 validateCredentials(request, username, password): will hash the provided
-password and check if it matches an existing user, returns a boolean.
+password and check if it matches an existing user, returns the User.
 
 normalizeUsername(username): returns the normalized form of the username
 for comparison and storage. Strips leading and trailing whitespace, lower-
 cases the name and converts to Unicode NFKD form.
 
-To log in a user you just need to raise LoginException with the name of the
+To log in a user you just need to raise LoginException with the User.id of the
 user you would like to log in. To log out, simply raise LogoutException. Both
 take a 'location' parameter which will determine where to redirect the user
 after logging in or out.
@@ -39,7 +39,7 @@ import hmac, unicodedata
 from werkzeug.utils import redirect
 
 from .users import User
-from .passwd import checkPassword, hashPassword
+from .passwd import checkPassword
 from .exceptions import HTTPException
 from .globals import conf
 from .utils import getIP
@@ -47,8 +47,7 @@ from .utils import getIP
 
 secret = lambda n,o=-0: (conf.session.secret +
                             (n+timedelta(hours=o)).strftime("%Y%m%d%H"))
-hash = lambda s, now, offset=-0: hmac.new(secret(now,offset),
-                                    s.encode('utf-8')).hexdigest()
+hash = lambda s, now, offset=-0: hmac.new(secret(now,offset),s).hexdigest()
 compare = lambda s, h, now, offset=-0: hash(s, now, offset) == h
 
 
@@ -58,7 +57,7 @@ class Session(object):
         assert conf.session.secret, "must configure a session secret"
         self.request = request
         self._user = None
-        self.username = None
+        self.userId = None
         self.authenticated = False
         self.cookieAuth() #always try cookie auth
 
@@ -67,10 +66,12 @@ class Session(object):
         if not self.authenticated:
             return None
         if not self._user:
-            txn = self.request.txn
-            self._user = txn.query(User).filter(
-                User.username == self.username).first()
+            self._user = self.request.txn.query(User).get(self.userId)
         return self._user
+
+    @property
+    def username(self):
+        return self.user.username
 
     def hasPermission(self, permission):
         """Check if the user has a permission; False if no user."""
@@ -79,52 +80,56 @@ class Session(object):
             return user.hasPermission(permission)
         return False
 
-    def auth(self, username):
-        self.username = normalizeUsername(username)
-        self._user = None # username changed.
+    def auth(self, userId):
+        if userId != self.userId:
+            self._user = None # userId changed.
+        self.userId = userId
         self.authenticated = True
 
     def cookieAuth(self):
-        self.username = self.request.cookies.get('nom')
-        self._user = None # username changed.
-        self.crumpet = self.request.cookies.get('crumpet')
-        if self.username and self.crumpet:
-            # bind session cookie to IP address for extra security.
-            token = u"%s:%s" % (self.username, getIP(self.request))
-            now = datetime.utcnow()
-            if compare(token, self.crumpet, now):
-                self.authenticated = True
-            elif compare(token, self.crumpet, now, -1):
-                self.newCredentials(self.username)
-                # unfortunately a new Session calls cookieAuth before
-                # it has been attached to its request.
-                self.request.session = self # for callbacks.
-                for func in conf.session.on_refresh:
-                    func(self.request)
-            else:
+        crumpet = self.request.cookies.get('crumpet')
+        if crumpet:
+            # hexidecimal string, split by 'i' for some reason.
+            # must be cookie-safe ascii characters.
+            try:
+                hexid,frob = crumpet.split('i')
+                # bind session cookie to IP address for extra security.
+                token = "%s:%s" % (hexid, getIP(self.request))
+                now = datetime.utcnow()
+                if compare(token, frob, now):
+                    self.auth(int(hexid,16))
+                elif compare(token, frob, now, -1):
+                    self.newCredentials(int(hexid,16))
+                    # unfortunately a new Session calls cookieAuth before
+                    # it has been attached to its request.
+                    self.request.session = self # for callbacks.
+                    for func in conf.session.on_refresh:
+                        func(self.request)
+                else:
+                    self.blankCredentials()
+            except Exception as e:
+                # malformed cookie.
+                print "malformed session:", crumpet, str(e)
                 self.blankCredentials()
 
-    def newCredentials(self, username):
+    def newCredentials(self, userId):
         """Generate a new session cookie and make the session logged in."""
-        self.username = normalizeUsername(username)
-        self._user = None # username changed.
-        self.authenticated = True
+        self.auth(userId)
+        hexid = hex(userId)[2:] # strip leading "0x"
         # bind session cookie to IP address for extra security.
-        token = u"%s:%s" % (self.username, getIP(self.request))
-        self.request.response.set_cookie('nom', self.username)
-        self.request.response.set_cookie('crumpet', hash(token,
-                                                         datetime.utcnow()))
+        token = "%s:%s" % (hexid, getIP(self.request))
+        crumpet = "%si%s" % (hexid, hash(token,datetime.utcnow()))
+        self.request.response.set_cookie('crumpet', crumpet)
 
     def blankCredentials(self):
-        self.request.response.delete_cookie('nom')
         self.request.response.delete_cookie('crumpet')
 
 
 class LoginException(HTTPException):
     """Raise this when a user successfully authenticates"""
 
-    def __init__(self, username, location):
-        self.username = username
+    def __init__(self, userId, location):
+        self.userId = userId
         self.location = location
 
     def __str__(self):
@@ -132,7 +137,7 @@ class LoginException(HTTPException):
 
     def handler(self, request):
         request.response = redirect(self.location)
-        request.session.newCredentials(self.username)
+        request.session.newCredentials(self.userId)
         for func in conf.session.on_login:
             func(request)
 
@@ -156,6 +161,9 @@ class LogoutException(HTTPException):
 def createUser(request, username, password):
     """Create a basic user, hashing their password"""
     username = normalizeUsername(username)
+    # NB. this guard doesn't prevent a conflict when the transaction
+    # commits - you might get a "concurrent modification" error if
+    # someone else commits a createUser for the same username first.
     if request.txn.query(User).filter_by(username=username).first():
         return False
     user = User(username, password)
@@ -168,9 +176,9 @@ def validateCredentials(request, username, password):
     password = password.strip()
     usr = request.txn.query(User).filter_by(username=username,
                                             enabled=True).first()
-    if usr:
-        return checkPassword(password, usr.password)
-    return False
+    if usr and checkPassword(password, usr.password):
+        return usr
+    return None
 
 def userExists(request, username):
     """Check if a username exists in the database."""
