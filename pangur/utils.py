@@ -30,7 +30,7 @@ class PermRule(Rule):
     def __init__(self, string, defaults=None, subdomain=None, methods=None,
                  build_only=False, endpoint=None, strict_slashes=None,
                  redirect_to=None, permission=None, template=None, func=None,
-                 authRequired=False, expires=None, mimetype=None):
+                 authRequired=False, expires=None, mimetype=None, nocache=False):
         Rule.__init__(self, string, defaults, subdomain, methods, build_only,
                       endpoint, strict_slashes, redirect_to)
         self.permission = permission
@@ -39,6 +39,7 @@ class PermRule(Rule):
         self.authRequired = authRequired
         self.expires = expires
         self.mimetype = mimetype
+        self.nocache = nocache
 
     def match(self, path):
         values = Rule.match(self, path)
@@ -49,6 +50,7 @@ class PermRule(Rule):
             values['func'] = self.func
             values['expires'] = self.expires
             values['mimetype'] = self.mimetype
+            values['nocache'] = self.nocache
         return values
 
 def map(rule, template=None, **kw):
@@ -335,6 +337,7 @@ def relative(request, path="", hash="", **kwargs):
     request.relative('bar', hash='b', foo=123)   example.com/1/2/bar?foo=123#b
     """
     path = opn(opj(request.path, path)).replace("\\","/")
+    print "PATH:", path
     path = quote_path(path) # percent escape, handle unicode.
     if kwargs:
         path = "%s?%s" % (path, url_encode(kwargs))

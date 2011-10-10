@@ -1,4 +1,5 @@
 from urllib import quote_plus
+from datetime import datetime, timedelta
 from werkzeug import Request, Response
 from werkzeug.exceptions import NotFound
 from jinja2 import Environment, FileSystemLoader, ext
@@ -15,6 +16,7 @@ templates = None
 db_conn = None
 conf = None
 static = None
+pastDate = datetime(2000,1,1)
 
 #decorator to register before render funcs
 @utils.registryDecorator
@@ -59,6 +61,16 @@ def application(request):
         permission = values['permission']
         request.response = Response(
             mimetype=values.get('mimetype') or 'text/html')
+        if values.get('nocache'):
+            request.response.expires = pastDate
+            request.response.cache_control.no_cache = True
+            request.response.cache_control.no_store = True
+            request.response.headers['Pragma'] = 'no-cache'
+            print "NOCACHE", request.response.headers.get('Expires')
+        elif values.get('expires'):
+            request.response.expires = datetime.utcnow() + \
+                timedelta(seconds=values.get('expires'))
+            print "EXPIRES", request.response.headers.get('Expires')
         request.conf = conf
         request.db = db_conn
         request.txn = request.db.begin()
@@ -66,7 +78,7 @@ def application(request):
         request.relative = lambda p="", **kw: utils.relative(request, p, **kw)
         templateVars = prepareToRender(request)
         #handle authRequired resource when user is not logged in
-        if values['authRequired'] and not request.session.authenticated:
+        if (values['authRequired'] or permission) and not request.session.authenticated:
             path = quote_plus(request.path.encode('utf-8'))
             raise RedirectException(
                 conf.URLS.login.format(fromPath=path))
