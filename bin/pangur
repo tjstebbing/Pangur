@@ -32,7 +32,7 @@ def run(conf, pkg):
     resources = {}
     for k,v in conf.dev.static_resources.items():
         resources[k] = v.format(**vars(conf.paths))
-    app = SharedDataMiddleware(application, resources)
+    app = SharedDataMiddleware(application, resources, cache_timeout=1)
     run_simple(conf.dev.interface, conf.dev.port, app, use_reloader=True, use_debugger=True)
 
 

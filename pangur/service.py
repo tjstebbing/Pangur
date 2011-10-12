@@ -66,11 +66,9 @@ def application(request):
             request.response.cache_control.no_cache = True
             request.response.cache_control.no_store = True
             request.response.headers['Pragma'] = 'no-cache'
-            print "NOCACHE", request.response.headers.get('Expires')
         elif values.get('expires'):
             request.response.expires = datetime.utcnow() + \
                 timedelta(seconds=values.get('expires'))
-            print "EXPIRES", request.response.headers.get('Expires')
         request.conf = conf
         request.db = db_conn
         request.txn = request.db.begin()

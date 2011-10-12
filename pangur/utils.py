@@ -337,7 +337,6 @@ def relative(request, path="", hash="", **kwargs):
     request.relative('bar', hash='b', foo=123)   example.com/1/2/bar?foo=123#b
     """
     path = opn(opj(request.path, path)).replace("\\","/")
-    print "PATH:", path
     path = quote_path(path) # percent escape, handle unicode.
     if kwargs:
         path = "%s?%s" % (path, url_encode(kwargs))
