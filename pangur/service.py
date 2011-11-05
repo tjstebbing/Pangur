@@ -122,6 +122,16 @@ def application(request):
     return request.response
 
 
+# https://github.com/mitsuhiko/werkzeug/issues/122
+# gunicorn sometimes passes SERVER_PORT as an int instead of a str.
+def fix_server_port(app):
+    def new_app(environ, start_response):
+        environ['SERVER_PORT'] = str(environ['SERVER_PORT'])
+        return app(environ, start_response)
+    return new_app
+application = fix_server_port(application)
+
+
 class JinjaUid(ext.Extension):
     """Adds a uid() global function that returns a unique id."""
     def __init__(self, environment):
